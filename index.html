@@ -43,10 +43,6 @@
   }
   @keyframes blink { 50% { opacity: 0; } }
 
-  .big-clock .colon-sec {
-    display: inline-block; width: 14px; text-align: center;
-    color: #999;
-  }
   .big-clock .sec {
     font-size: 32px; font-weight: 400;
     color: #999;
@@ -127,7 +123,7 @@
 <div class="container">
   <div class="calendar-section">
     <div class="big-clock" id="clockDisplay">
-      --<span class="colon">:</span>--<span class="colon-sec">:</span><span class="sec">--</span>
+      --<span class="colon">:</span>--<span class="sec">&nbsp;--</span>
     </div>
     <div class="big-date" id="dateDisplay">2026/--/--</div>
     <div class="date-sub">
@@ -229,7 +225,7 @@ function updateClock() {
   var h = pad(now.getUTCHours(),2);
   var m = pad(now.getUTCMinutes(),2);
   var s = pad(now.getUTCSeconds(),2);
-  document.getElementById('clockDisplay').innerHTML = h+'<span class="colon">:</span>'+m+'<span class="colon-sec">:</span><span class="sec">'+s+'</span>';
+  document.getElementById('clockDisplay').innerHTML = h+'<span class="colon">:</span>'+m+'<span class="sec">&nbsp;'+s+'</span>';
 }
 updateClock();
 setInterval(updateClock, 1000);
