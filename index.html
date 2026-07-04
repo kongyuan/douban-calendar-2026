@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>2026 豆瓣电影日历</title>
+<title>2026 电影日历</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body {
@@ -88,7 +88,7 @@
   /* ===== 底部导航 ===== */
   .nav-bar {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 6px 14px; border-top: 1px solid #ccc;
+    padding: 6px 10px; border-top: 1px solid #ccc;
     flex: 0 0 auto;
   }
   .nav-btn {
@@ -101,14 +101,18 @@
   .nav-btn.disabled { opacity: 0.3; }
   .nav-center {
     font-size: 13px; color: #555;
-    display: flex; align-items: center; gap: 6px;
+    display: flex; align-items: center; gap: 4px;
   }
   .nav-center input {
-    width: 56px; text-align: center;
+    width: 54px; text-align: center;
     border: 1px solid #ccc; font-size: 13px; padding: 2px 4px;
   }
   .nav-center .btn-sm {
-    font-size: 11px; padding: 2px 8px;
+    font-size: 11px; padding: 2px 6px;
+    border: 1px solid #999; background: #fff; cursor: pointer;
+  }
+  .fs-btn {
+    font-size: 14px; padding: 2px 8px;
     border: 1px solid #999; background: #fff; cursor: pointer;
   }
 </style>
@@ -117,7 +121,7 @@
 
 <div class="container">
   <div class="calendar-section">
-    <span class="cal-title">2026 豆瓣电影日历</span>
+    <span class="cal-title">2026 电影日历</span>
     <div class="big-clock" id="clockDisplay">
       --<span class="colon">:</span>--<span class="sec">--</span>
     </div>
@@ -137,6 +141,7 @@
   <div class="nav-bar">
     <button class="nav-btn" id="prevBtn">&lt;</button>
     <div class="nav-center">
+      <button class="fs-btn" id="fsBtn">⬜</button>
       <span id="navLabel"></span>
       <input id="gotoInput" type="text" placeholder="MMDD" maxlength="4">
       <button class="btn-sm" id="gotoBtn">跳转</button>
@@ -245,6 +250,28 @@ document.getElementById('gotoBtn').onclick = function() {
   if (v.length===4 && MAP[v]) { curMonth=parseInt(v.substring(0,2),10); curDay=parseInt(v.substring(2,4),10); render(curMonth,curDay); }
 };
 document.getElementById('gotoInput').onkeypress = function(e) { if(e.key==='Enter') document.getElementById('gotoBtn').click(); };
+
+// 全屏
+function toggleFullscreen() {
+  var el = document.documentElement;
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    document.getElementById('fsBtn').textContent = '⛶';
+  } else {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    document.getElementById('fsBtn').textContent = '⬜';
+  }
+}
+document.getElementById('fsBtn').onclick = toggleFullscreen;
+
+// 进入页面时尝试自动全屏
+setTimeout(function() {
+  var el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}, 500);
 
 render(curMonth, curDay);
 </script>
