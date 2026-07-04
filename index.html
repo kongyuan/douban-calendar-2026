@@ -29,10 +29,7 @@
     border-bottom: 2px solid #000;
     position: relative;
   }
-  .cal-title {
-    position: absolute; top: 8px; left: 14px;
-    font-size: 13px; color: #888; letter-spacing: 1px;
-  }
+  /* 去掉顶部标题 */
 
   .big-clock {
     font-size: 78px; font-weight: 700;
@@ -67,17 +64,17 @@
   }
 
   .movie-title {
-    font-size: 24px; font-weight: 700; line-height: 1.4; margin-bottom: 6px;
+    font-size: 18px; font-weight: 700; line-height: 1.4; margin-bottom: 6px;
   }
   .movie-title a { color: #000; text-decoration: none; border-bottom: 1px dotted #aaa; }
-  .movie-title .rating { font-size: 16px; font-weight: 400; color: #666; margin-left: 8px; }
+  .movie-title .rating { font-size: 15px; font-weight: 400; color: #666; margin-left: 8px; }
 
   .movie-meta {
-    font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 10px;
+    font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 8px;
   }
 
   .movie-quote {
-    font-size: 16px;
+    font-size: 22px;
     font-style: italic; line-height: 1.7;
     color: #333;
     padding: 10px 14px;
@@ -126,7 +123,6 @@
 
 <div class="container">
   <div class="calendar-section">
-    <span class="cal-title">2026 电影日历</span>
     <div class="big-clock" id="clockDisplay">
       --<span class="colon">:</span>--
     </div>
@@ -148,7 +144,6 @@
     <button class="nav-btn" id="prevBtn">&lt;</button>
     <div class="nav-center">
       <button class="fs-btn" id="fsBtn">⬜</button>
-      <span id="navLabel"></span>
       <input id="gotoInput" type="text" placeholder="MMDD" maxlength="4">
       <button class="btn-sm" id="gotoBtn">跳转</button>
     </div>
@@ -181,7 +176,7 @@ function render(m, d) {
   var key = pad(m,2)+pad(d,2);
   var entry = MAP[key];
   var dt = new Date(curYear, m-1, d);
-  document.getElementById('dateDisplay').textContent = pad(m,2)+'/'+pad(d,2);
+  document.getElementById('dateDisplay').textContent = '2026/'+pad(m,2)+'/'+pad(d,2);
   document.getElementById('weekdayDisplay').textContent = WEEKDAY[dt.getDay()];
 
   if (!entry) {
@@ -189,7 +184,6 @@ function render(m, d) {
     document.getElementById('movieTitle').innerHTML = '无数据';
     document.getElementById('movieMeta').textContent = '';
     document.getElementById('movieQuote').innerHTML = '';
-    document.getElementById('navLabel').textContent = m+'月'+d+'日';
     document.getElementById('gotoInput').value = key;
     return;
   }
@@ -212,7 +206,6 @@ function render(m, d) {
   document.getElementById('movieMeta').textContent = parts.join(' · ') || '';
   document.getElementById('movieQuote').innerHTML = '&ldquo;'+(entry.q||'')+'&rdquo;';
 
-  document.getElementById('navLabel').textContent = m+'月'+d+'日';
   document.getElementById('gotoInput').value = key;
 
   var keys = Object.keys(MAP).sort();
