@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>2026 电影日历</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -112,8 +114,9 @@
     border: 1px solid #999; background: #fff; cursor: pointer;
   }
   .fs-btn {
-    font-size: 14px; padding: 2px 8px;
-    border: 1px solid #999; background: #fff; cursor: pointer;
+    font-size: 16px; padding: 2px 4px;
+    background: none; border: none; cursor: pointer;
+    margin-right: 12px;
   }
 </style>
 </head>
@@ -251,27 +254,36 @@ document.getElementById('gotoBtn').onclick = function() {
 };
 document.getElementById('gotoInput').onkeypress = function(e) { if(e.key==='Enter') document.getElementById('gotoBtn').click(); };
 
-// 全屏
+// 全屏 — Kindle 兼容多策略
 function toggleFullscreen() {
   var el = document.documentElement;
-  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-    if (el.requestFullscreen) el.requestFullscreen();
-    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-    document.getElementById('fsBtn').textContent = '⛶';
-  } else {
+  // 退出全屏
+  if (document.fullscreenElement || document.webkitFullscreenElement || document.webkitIsFullScreen) {
     if (document.exitFullscreen) document.exitFullscreen();
     else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
     document.getElementById('fsBtn').textContent = '⬜';
+    return;
   }
+  // 进入全屏 — 尝试所有方式
+  if (el.requestFullscreen) { el.requestFullscreen(); }
+  else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); }
+  else if (el.webkitRequestFullScreen) { el.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT); }
+  // Kindle 备选：隐藏地址栏
+  window.scrollTo(0, 1);
+  setTimeout(function() { window.scrollTo(0, 1); }, 100);
+  document.getElementById('fsBtn').textContent = '⛶';
 }
 document.getElementById('fsBtn').onclick = toggleFullscreen;
 
-// 进入页面时尝试自动全屏
+// 进入页面时尝试隐藏地址栏
 setTimeout(function() {
+  window.scrollTo(0, 1);
+  // 尝试 Kindle 浏览器全屏
   var el = document.documentElement;
-  if (el.requestFullscreen) el.requestFullscreen();
-  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-}, 500);
+  if (el.webkitRequestFullScreen) { el.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT); }
+  else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); }
+}, 1000);
 
 render(curMonth, curDay);
 </script>
